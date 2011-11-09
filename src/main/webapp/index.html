@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html xmlns:ng="http://angularjs.org" xmlns:st="http://github.com/tigbro/sencha-touch-angular-adapter">
+<head>
+    <title>Sencha Angular Toys</title>
+    <meta name="auto-start" content="true">
+
+    <link rel="stylesheet" href="lib/sencha-touch.css"/>
+    <script src="lib/angular-0.9.19.js"></script>
+    <script src="lib/sencha-touch-1.1.0.js"></script>
+    <script src="lib/sencha-touch-angular-adapter-0.9.2.js"></script>
+    <script src="app/controller.js"></script>
+</head>
+<body>
+
+<st:tabpanel tab-bar-dock="bottom" id="main" fullscreen="true">
+
+    <st:panel title="Lists" id="lists" ng:controller="ListController" scroll="true">
+        <st:fieldset title="Select text in list">
+            <st:textfield name="selectedName" place-holder="enter text to select entries in the list"></st:textfield>
+        </st:fieldset>
+        <st:fieldset title="Plain list">
+            <st:panel layout.type="hbox" layout.align="stretch">
+                <st:textfield name="insertText" flex="1" place-holder="text for new entry"
+                              st:event="{action: 'addItem()'}"></st:textfield>
+                <st:button text="Add" st:event="{tap:'addItem()'}"></st:button>
+                <st:button text="Clear" st:event="{tap:'clearItems()'}"></st:button>
+            </st:panel>
+            <st:list scroll="false">
+                <div ng:repeat="item in items" st:selected="isSelected(item)" st:event="{tap:'itemTap(item)'}">
+                    {{item.name}}
+                </div>
+            </st:list>
+        </st:fieldset>
+    </st:panel>
+
+    <st:panel title="Grouped lists" id="grouped-lists" ng:controller="ListController" scroll="true">
+
+        <st:fieldset title="Select text in list">
+            <st:textfield name="selectedName" place-holder="enter text to select entries in the list"></st:textfield>
+        </st:fieldset>
+        <st:fieldset title="Grouped list">
+            <st:panel layout.type="hbox" layout.align="stretch">
+                <st:textfield name="insertText" flex="1" place-holder="text for new entry"
+                              st:event="{action: 'addItem()'}"></st:textfield>
+                <st:button text="Add" st:event="{tap:'addItem()'}"></st:button>
+                <st:button text="Clear" st:event="{tap:'clearItems()'}"></st:button>
+            </st:panel>
+            <st:grouped-list scroll="false">
+                <div group="{{group.group}}" ng:repeat="group in items.$groupBy('name',1)">
+                    <div ng:repeat="item in group.entries" st:event="{tap:'itemTap(item)'}"
+                         st:selected="isSelected(item)">
+                        {{item.name}}
+                    </div>
+                </div>
+            </st:grouped-list>
+        </st:fieldset>
+    </st:panel>
+
+    <st:panel title="Toolbars" id="toolbars" ng:controller="ToolbarsController" scroll="true">
+        <st:toolbar dock="top">
+            <st:button text="Clickme Top" st:event="{tap:'clicked()'}"></st:button>
+        </st:toolbar>
+        <st:panel>
+        </st:panel>
+        <st:toolbar dock="bottom">
+            <st:button text="Clickme Bottom" st:event="{tap:'clicked()'}"></st:button>
+        </st:toolbar>
+    </st:panel>
+
+    <st:panel id="popups" title="Popups">
+        <st:toolbar dock="top">
+            <st:button text="Show Popup" st:event="{tap:'$navigate(\'popup1\')'}"></st:button>
+            <st:button text="Show Sheet" st:event="{tap:'$navigate(\'sheet1\')'}"></st:button>
+        </st:toolbar>
+
+    </st:panel>
+
+    <st:carousel id="carousel" title="Carousel">
+        <st:custom>
+            Page1
+        </st:custom>
+        <st:custom>
+            Page2
+        </st:custom>
+        <st:custom>
+            Page3
+        </st:custom>
+    </st:carousel>
+
+    <st:panel title="Forms" id="forms" ng:controller="FormController" scroll="true">
+        <st:fieldset title="Debug">
+            <st:custom>
+                {{data}}
+            </st:custom>
+        </st:fieldset>
+
+        <st:textfield name="data.text" label="Text"></st:textfield>
+
+        <st:fieldset title="Personal Info" instructions="Please enter the information above."
+                     defaults.required="true" defaults.label-align="left" defaults.label-width="40%">
+
+
+            <st:textfield name="data.name" label="Name" user-clear-icon=true auto-capitalize=false></st:textfield>
+            <st:passwordfield name="data.password" label="Password" user-clear-icon=false></st:passwordfield>
+            <st:textfield name="data.disabled" label="Disabled" disabled=true user-clear-icon=true></st:textfield>
+            <st:emailfield name="data.email" label="Email" place-holder="you@sencha.com"
+                           user-clear-icon=true></st:emailfield>
+            <st:urlfield name="data.url" label="Url" place-holder="http://sencha.com"
+                         user-clear-icon=true></st:urlfield>
+            <st:checkboxfield name="data.cool" label="Cool" value=true></st:checkboxfield>
+            <st:spinnerfield name="data.spinner" label="Spinner"></st:spinnerfield>
+            <st:selectfield name="data.rank" label="Rank" display-field="title" value-field="rank"
+                            options="[{rank: 'master', title: 'Master'},{rank: 'teacher', title: 'Instructor'}]">
+            </st:selectfield>
+            <st:hiddenfield name="data.secret" value="false"></st:hiddenfield>
+            <st:textareafield name="data.bio" label="Bio" max-length="60" max-rows="10"></st:textareafield>
+            <st:sliderfield name="data.height" label="Height"></st:sliderfield>
+            <st:togglefield name="data.securityMode" label="Security Mode"></st:togglefield>
+            <st:radiofield name="data.team" label="Red Team" value="redteam"></st:radiofield>
+            <st:radiofield name="data.team" label="Blue Team" value="blueteam"></st:radiofield>
+        </st:fieldset>
+        <st:fieldset title="Favorite color">
+            <st:radiofield name="data.color" label="Red" value="red"></st:radiofield>
+            <st:radiofield name="data.color" label="Green" checked=true value="green"></st:radiofield>
+        </st:fieldset>
+        <st:fieldset title="HTML5">
+            <st:numberfield name="data.number" label="Number" max-value="20" min-value="2"></st:numberfield>
+            <st:emailfield name="data.email2" label="Email" user-clear-icon="true"></st:emailfield>
+            <st:urlfield name="data.url2" label="URL" user-clear-icon="true"></st:urlfield>
+        </st:fieldset>
+
+        <st:fieldset title="Single Select (in fieldset)">
+            <st:selectfield name="data.options2" display-field="text" value-field="value"
+                            options="[{value:'1', text:'This is just a big select with text that is overflowing'},{value:'2',text:'This is just a big select with text that is overflowing'}]">
+            </st:selectfield>
+        </st:fieldset>
+
+        <st:fieldset title="Single Text (in fieldset)">
+            <st:textfield name="data.single_text" user-clear-icon="true"></st:textfield>
+        </st:fieldset>
+
+        <st:fieldset title="Single Toggle (in fieldset)">
+            <st:togglefield name="data.single_toggle" value="1"></st:togglefield>
+        </st:fieldset>
+        <st:fieldset title="Single Slider (in fieldset)">
+            <st:sliderfield name="data.single_slider" value="60"></st:sliderfield>
+        </st:fieldset>
+
+    </st:panel>
+</st:tabpanel>
+
+<st:sheet id="sheet1">
+    <st:button dock="top" text="Button1" st:event="{tap:'$navigate(\'sheet1\')'}"></st:button>
+</st:sheet>
+
+<st:panel title="Popup1" id="popup1" floating="true" centered="true" modal="true">
+    <st:custom>
+        Hello
+    </st:custom>
+    <st:button text="Hide" st:event="{tap:'$navigate(\'back\')'}"></st:button>
+</st:panel>
+
+</body>
+</html>
